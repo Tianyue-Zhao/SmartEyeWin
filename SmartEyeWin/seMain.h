@@ -12,6 +12,7 @@ public:
 	~seMain();
 
 	wxButton* testbtn = nullptr;
+	wxCheckListBox* brightSel = nullptr;
 
 	void start_checker();
 	void OnThreadUpdate(wxThreadEvent& evt);

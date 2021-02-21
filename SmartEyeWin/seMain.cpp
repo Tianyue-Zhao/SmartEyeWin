@@ -11,7 +11,10 @@ wxEND_EVENT_TABLE()
 
 seMain::seMain() : wxFrame(nullptr, wxID_ANY, "Title", wxPoint(50, 50), wxSize(800, 600))
 {
-	testbtn = new wxButton(this, 10001, "TestBTN", wxPoint(10, 10), wxSize(10,10));
+	//testbtn = new wxButton(this, 10001, "TestBTN", wxPoint(30, 30), wxSize(50,50));
+	const wxString test[1] = { wxString::FromAscii("test") };
+	brightSel = new wxCheckListBox();
+	brightSel->Create(this, 10002, wxPoint(10, 10), wxSize(100, 200), 1, test, 0);
 	Bind(wxEVT_THREAD, &seMain::OnThreadUpdate, this);
 	brightKW->push_back("Visual");
 	brightKW->push_back("Discord");
@@ -73,6 +76,7 @@ void seMain::OnClose(wxCloseEvent&)
 {
 	if ((GetThread()) && (GetThread()->IsRunning())) { GetThread()->Wait(); }
 	ReleaseDC(NULL, main_context);
+	delete testbtn;
 	Destroy();
 }
 
