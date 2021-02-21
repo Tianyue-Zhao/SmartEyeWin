@@ -14,6 +14,7 @@ bool window_log_cb(HWND handle, LPARAM window_list)
 	return true;
 }
 
+//Function that returns a vector of all currently running windows
 std::vector<std::string>* window_scan()
 {
 	//Assembles a list of currently running windows

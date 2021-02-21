@@ -10,6 +10,6 @@ bool set_gamma(int r, int g, int b, HDC context)
 		gamma_array[0][i] = r * i;
 		gamma_array[1][i] = g * i;
 		gamma_array[2][i] = b * i;
-	}
+	} //SetDeviceGammaRamp to apply the gamma values
 	return SetDeviceGammaRamp(context, gamma_array);
 }
