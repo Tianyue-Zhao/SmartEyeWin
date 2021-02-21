@@ -24,7 +24,11 @@ protected:
 	//false for bright, true for blue light filtering mode
 	bool cur_lighting_state = false;
 	std::vector<std::string>* brightKW = new std::vector<std::string>();
+	std::string** brightTOT = nullptr;
+	int brightLen = 0;
+	wxString choices[11];
 	HDC main_context = GetDC(NULL);
+	std::string** scanWindows();
 	virtual wxThread::ExitCode Entry();
 };
 

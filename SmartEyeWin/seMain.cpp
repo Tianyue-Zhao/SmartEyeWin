@@ -13,14 +13,29 @@ seMain::seMain() : wxFrame(nullptr, wxID_ANY, "Title", wxPoint(50, 50), wxSize(8
 {
 	//testbtn = new wxButton(this, 10001, "TestBTN", wxPoint(30, 30), wxSize(50,50));
 	const wxString test[1] = { wxString::FromAscii("test") };
-	brightSel = new wxCheckListBox();
-	brightSel->Create(this, 10002, wxPoint(10, 10), wxSize(100, 200), 1, test, 0);
+	//wxWidgets allows actions when the thread updates
 	Bind(wxEVT_THREAD, &seMain::OnThreadUpdate, this);
-	brightKW->push_back("Visual");
-	brightKW->push_back("Discord");
+	brightTOT = (std::string**)malloc(11*sizeof(std::string*));
+	brightTOT[0] = new std::string("Blender");
+	brightTOT[1] = new std::string("Console");
+	brightTOT[2] = new std::string("Discord");
+	brightTOT[3] = new std::string("Elite");
+	brightTOT[4] = new std::string("Epic");
+	brightTOT[5] = new std::string("Firefox");
+	brightTOT[6] = new std::string("Notepad");
+	brightTOT[7] = new std::string("PyCharm");
+	brightTOT[8] = new std::string("Snipping Tool");
+	brightTOT[9] = new std::string("Steam");
+	brightTOT[10] = new std::string("Visual Studio");
+	brightLen = 11;
+	brightKWK = scanWindows();
+	//Initialize the main list
+	//Start the checker thread
+	//This checks the current foreground window
 	start_checker();
 }
 
+//Memory is freed in OnClose
 seMain::~seMain()
 {
 }
@@ -82,4 +97,34 @@ void seMain::OnClose(wxCloseEvent&)
 
 void seMain::OnThreadUpdate(wxThreadEvent& evt)
 {
+}
+
+std::string** seMain::scanWindows()
+{
+	std::vector<std::string>* window_list = window_scan();
+	brightKW->clear();
+	int i;
+	int len = window_list->size();
+	auto begin = window_list->begin();
+	auto end = window_list->end();
+	for (;begin != end;begin++)
+	{
+		if (!(*begin).length()) { continue; }
+		for (i = 0;i < brightLen;i++)
+		{
+			//TODO Make sure duplicates are not repeated
+			if ((*begin).find(*(brightTOT[i])) != std::string::npos)
+			{
+				brightKW->push_back(*(brightTOT[i]));
+			}
+		}
+	}
+	len = brightKW->size();
+	for (i = 0;i < len;i++)
+	{
+		choices[i] = wxString((*brightKW)[i]);
+	}
+	//Two-step creation of the checklistbox
+	brightSel = new wxCheckListBox();
+	brightSel->Create(this, 10002, wxPoint(10, 10), wxSize(100, 200), len, choices, 0);
 }
