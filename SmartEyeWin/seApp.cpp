@@ -2,7 +2,7 @@
 
 wxIMPLEMENT_APP(seApp);
 
-seApp::seApp()
+seApp::seApp() //The seApp class launches the application
 {
 }
 

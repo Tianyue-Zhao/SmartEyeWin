@@ -3,6 +3,7 @@
 #include <iostream>
 #include "se_scan.h"
 
+//A test program that scans all currently active windows
 int main()
 {
 	std::vector<std::string>* window_list = window_scan();

@@ -40,6 +40,7 @@ seMain::~seMain()
 {
 }
 
+//Creates the thread that checks the currently active window
 void seMain::start_checker()
 {
 	if (CreateThread(wxTHREAD_JOINABLE) != wxTHREAD_NO_ERROR)
@@ -50,6 +51,8 @@ void seMain::start_checker()
 	GetThread()->Run();
 }
 
+//The thread that checks the currently active window
+//This runs in a separate thread
 wxThread::ExitCode seMain::Entry()
 {
 	char* title_buffer = (char*)malloc(200 * sizeof(char));
@@ -58,19 +61,22 @@ wxThread::ExitCode seMain::Entry()
 	{
 		auto begin = brightKW->begin();
 		auto end = brightKW->end();
+		//Get the foreground window handle and the window title
 		HWND handle = GetForegroundWindow();
 		std::string window_title;
 		GetWindowTextA(handle, title_buffer, 200);
 		window_title.assign(title_buffer);
 		flag = false;
 		int i = 0;
+		//Decide if the currently active window is in brightKW
+		//Change the lighting state if different from before
 		for (;begin != end;begin++)
 		{
 			if (!brightSel->IsChecked(i++)) { continue; }
 			if (window_title.find(*begin) != std::string::npos)
 			{
 				flag = true;
-				if (cur_lighting_state)
+				if (cur_lighting_state) //Set bright
 				{
 					set_gamma(256, 256, 256, main_context);
 					cur_lighting_state = false;
@@ -78,7 +84,7 @@ wxThread::ExitCode seMain::Entry()
 				break;
 			}
 		}
-		if ((!flag) && (!cur_lighting_state))
+		if ((!flag) && (!cur_lighting_state)) //Set low
 		{
 			set_gamma(192, 192, 144, main_context);
 			cur_lighting_state = true;
@@ -101,6 +107,7 @@ void seMain::OnThreadUpdate(wxThreadEvent& evt)
 {
 }
 
+//Find what windows are currently running
 void seMain::scanWindows()
 {
 	std::vector<std::string>* window_list = window_scan();
