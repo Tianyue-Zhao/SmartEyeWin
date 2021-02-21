@@ -1,4 +1,4 @@
-#include <string>
+/*#include <string>
 #include <vector>
 #include <iostream>
 #include "se_scan.h"
@@ -16,4 +16,4 @@ int main()
 	}
 	delete window_list;
 	return 0;
-}
+}*/
