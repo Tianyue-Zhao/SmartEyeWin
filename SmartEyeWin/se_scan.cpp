@@ -3,11 +3,12 @@
 #include <string>
 #include <vector>
 
+//Callback function that logs the name of the window handle that it receives
 bool window_log_cb(HWND handle, LPARAM window_list)
 {
 	char* window_title = (char*)malloc(100 * sizeof(char));
 	if (!window_title) { return false; }
-	GetWindowTextA(handle, window_title, 100);
+	GetWindowTextA(handle, window_title, 100); //Get the window title
 	((std::vector<std::string>*)window_list)->push_back(window_title);
 	free(window_title);
 	return true;

@@ -140,10 +140,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="se_set.h" />
     <ClInclude Include="se_scan.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="se_scan.cpp" />
+    <ClCompile Include="se_set.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
