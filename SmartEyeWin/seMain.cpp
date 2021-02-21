@@ -4,13 +4,15 @@
 #include <thread>
 #include <chrono>
 
-/*wxBEGIN_EVENT_TABLE(seMain, wxFrame)
-	EVT_BUTTON(10001, setLow)
-wxEND_EVENT_TABLE()*/
+wxBEGIN_EVENT_TABLE(seMain, wxFrame)
+	//EVT_BUTTON(10001, setLow)
+	EVT_CLOSE(seMain::OnClose)
+wxEND_EVENT_TABLE()
 
-seMain::seMain() : wxFrame(nullptr, wxID_ANY, "Title", wxPoint(50,50), wxSize(800,600))
+seMain::seMain() : wxFrame(nullptr, wxID_ANY, "Title", wxPoint(50, 50), wxSize(800, 600))
 {
 	testbtn = new wxButton(this, 10001, "TestBTN", wxPoint(10, 10), wxSize(10,10));
+	Bind(wxEVT_THREAD, &seMain::OnThreadUpdate, this);
 }
 
 seMain::~seMain()
@@ -61,4 +63,16 @@ wxThread::ExitCode seMain::Entry()
 		std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 	}
 	free(title_buffer);
+	return (wxThread::ExitCode)0;
+}
+
+void seMain::OnClose(wxCloseEvent&)
+{
+	if ((GetThread()) && (GetThread()->IsRunning())) { GetThread()->Wait(); }
+	ReleaseDC(NULL, main_context);
+	Destroy();
+}
+
+void seMain::OnThreadUpdate(wxThreadEvent& evt)
+{
 }

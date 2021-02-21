@@ -13,9 +13,9 @@ public:
 
 	wxButton* testbtn = nullptr;
 
-	void setLow(wxCommandEvent& evt);
-
 	void start_checker();
+	void OnThreadUpdate(wxThreadEvent& evt);
+	void OnClose(wxCloseEvent&);
 
 	//wxDECLARE_EVENT_TABLE();
 
