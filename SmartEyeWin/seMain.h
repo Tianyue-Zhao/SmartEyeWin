@@ -28,7 +28,7 @@ protected:
 	int brightLen = 0;
 	wxString choices[11];
 	HDC main_context = GetDC(NULL);
-	std::string** scanWindows();
+	void scanWindows();
 	virtual wxThread::ExitCode Entry();
 };
 

@@ -9,7 +9,7 @@ wxBEGIN_EVENT_TABLE(seMain, wxFrame)
 	EVT_CLOSE(seMain::OnClose)
 wxEND_EVENT_TABLE()
 
-seMain::seMain() : wxFrame(nullptr, wxID_ANY, "Title", wxPoint(50, 50), wxSize(800, 600))
+seMain::seMain() : wxFrame(nullptr, wxID_ANY, "Selector", wxPoint(50, 50), wxSize(800, 600))
 {
 	//testbtn = new wxButton(this, 10001, "TestBTN", wxPoint(30, 30), wxSize(50,50));
 	const wxString test[1] = { wxString::FromAscii("test") };
@@ -28,7 +28,7 @@ seMain::seMain() : wxFrame(nullptr, wxID_ANY, "Title", wxPoint(50, 50), wxSize(8
 	brightTOT[9] = new std::string("Steam");
 	brightTOT[10] = new std::string("Visual Studio");
 	brightLen = 11;
-	brightKWK = scanWindows();
+	scanWindows();
 	//Initialize the main list
 	//Start the checker thread
 	//This checks the current foreground window
@@ -63,8 +63,10 @@ wxThread::ExitCode seMain::Entry()
 		GetWindowTextA(handle, title_buffer, 200);
 		window_title.assign(title_buffer);
 		flag = false;
+		int i = 0;
 		for (;begin != end;begin++)
 		{
+			if (!brightSel->IsChecked(i++)) { continue; }
 			if (window_title.find(*begin) != std::string::npos)
 			{
 				flag = true;
@@ -99,7 +101,7 @@ void seMain::OnThreadUpdate(wxThreadEvent& evt)
 {
 }
 
-std::string** seMain::scanWindows()
+void seMain::scanWindows()
 {
 	std::vector<std::string>* window_list = window_scan();
 	brightKW->clear();
@@ -107,15 +109,19 @@ std::string** seMain::scanWindows()
 	int len = window_list->size();
 	auto begin = window_list->begin();
 	auto end = window_list->end();
+	bool present[11];
+	memset(present, false, 11);
 	for (;begin != end;begin++)
 	{
 		if (!(*begin).length()) { continue; }
 		for (i = 0;i < brightLen;i++)
 		{
+			if (present[i]) { continue; }
 			//TODO Make sure duplicates are not repeated
 			if ((*begin).find(*(brightTOT[i])) != std::string::npos)
 			{
 				brightKW->push_back(*(brightTOT[i]));
+				present[i] = true;
 			}
 		}
 	}
@@ -127,4 +133,5 @@ std::string** seMain::scanWindows()
 	//Two-step creation of the checklistbox
 	brightSel = new wxCheckListBox();
 	brightSel->Create(this, 10002, wxPoint(10, 10), wxSize(100, 200), len, choices, 0);
+	delete window_list;
 }

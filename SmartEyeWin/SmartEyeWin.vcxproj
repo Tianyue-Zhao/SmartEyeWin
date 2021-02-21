@@ -27,7 +27,9 @@
   <ItemGroup>
     <ClCompile Include="seApp.cpp" />
     <ClCompile Include="seMain.cpp" />
-    <ClCompile Include="se_scan.cpp" />
+    <ClCompile Include="se_scan.cpp">
+      <CallingConvention Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Cdecl</CallingConvention>
+    </ClCompile>
     <ClCompile Include="se_set.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
