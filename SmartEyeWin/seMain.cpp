@@ -13,6 +13,9 @@ seMain::seMain() : wxFrame(nullptr, wxID_ANY, "Title", wxPoint(50, 50), wxSize(8
 {
 	testbtn = new wxButton(this, 10001, "TestBTN", wxPoint(10, 10), wxSize(10,10));
 	Bind(wxEVT_THREAD, &seMain::OnThreadUpdate, this);
+	brightKW->push_back("Visual");
+	brightKW->push_back("Discord");
+	start_checker();
 }
 
 seMain::~seMain()
@@ -37,7 +40,7 @@ wxThread::ExitCode seMain::Entry()
 	{
 		auto begin = brightKW->begin();
 		auto end = brightKW->end();
-		HWND handle = GetActiveWindow();
+		HWND handle = GetForegroundWindow();
 		std::string window_title;
 		GetWindowTextA(handle, title_buffer, 200);
 		window_title.assign(title_buffer);
@@ -60,7 +63,7 @@ wxThread::ExitCode seMain::Entry()
 			set_gamma(192, 192, 144, main_context);
 			cur_lighting_state = true;
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 	free(title_buffer);
 	return (wxThread::ExitCode)0;

@@ -17,11 +17,11 @@ public:
 	void OnThreadUpdate(wxThreadEvent& evt);
 	void OnClose(wxCloseEvent&);
 
-	//wxDECLARE_EVENT_TABLE();
+	wxDECLARE_EVENT_TABLE();
 
 protected:
 	//false for bright, true for blue light filtering mode
-	bool cur_lighting_state = true;
+	bool cur_lighting_state = false;
 	std::vector<std::string>* brightKW = new std::vector<std::string>();
 	HDC main_context = GetDC(NULL);
 	virtual wxThread::ExitCode Entry();
